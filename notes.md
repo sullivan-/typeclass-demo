@@ -1,37 +1,43 @@
 # Speaker Notes / Outline
 
-- define trait Comp
-- define IntComp and StringComp
-- specs for those
-- define Comp.ops
-- specs for that
-- **advantage 1**: we have added functionality to classes that were provided to us.
-- define Comps.max
-- specs for that
-- this demonstrates the main advantage of writing generic code. this is not an advantage over
-  subtype polymorphism, which provides an equivalent mechanism. in fact, type classes have a minor
-  disadvantage here, as the mechanics of type class implementation bleeds through with the
-  `import ops._`.
-- define CaseInsensitiveStringComp and specs
-- **advantage 2**: Scala type classes allow for multiple implementations. You can't do this with
-  sub-typing. It's worth noting that in Haskel, you can't do this. You can only have a single type
-  class instance per class. The tradeoff here is that in Scala, you need to deal with all the ugly
-  details of a raw implementation with implicits.
-- define PairComp and specs
-- using shapeless, we could define Comps for any n-tuple, case class, or sealed trait hierarchy,
-  assuming that the leaf members of the type all had implicit Comps available.
-- **advantage 3**: non-instance methods such as unit/pure
-  - see for example cats [Applicative.pure](https://github.com/typelevel/cats/blob/eab04cf135e645930dad549a286edad419880b68/core/src/main/scala/cats/Applicative.scala#L30)
-  - define Comp.min and in subclasses
-  - define minShouldBeSmaller and test for IntComp.min
-- simulacrum:
-  - copy Comp to Comp2, CompSpecs to CompSpecs2
-  - rm Comp.apply & Comp.ops
-  - add @simulacrum.typeclass
-  - run tests
+- Type classes provide what is known as [ad-hoc polymorphism](https://en.wikipedia.org/wiki/Ad_hoc_polymorphism).
+  - This is a way to add functionality to our types, where we can reuse the mechanics across many target types.
+  - This is a functional alternative to [subtype polymorphism](https://en.wikipedia.org/wiki/Subtyping).
+  - These represent two of the three major kinds of [polymorphism](https://en.wikipedia.org/wiki/Polymorphism_(computer_science)), along with [parametric polymorphism](https://en.wikipedia.org/wiki/Parametric_polymorphism), or generics.
+- As a straightforward example, we'll look at a type class alternative to [Java's Comparable](https://docs.oracle.com/javase/8/docs/api/java/lang/Comparable.html).
+- Create a basic typeclass
+  - Define trait Comp
+  - Define intComp and stringComp
+  - Specs for those
+- Add OO feel
+  - Define Comp.apply & Comp.ops
+  - Specs for that
+  - **Advantage 1**: We have added functionality to classes that were provided to us.
+- Define a generic method using Comp
+  - define Comps.max
+  - Specs for that
+  - This demonstrates the main advantage of writing generic code. this is not an advantage over subtype polymorphism, which provides an equivalent mechanism. in fact, type classes have a minor disadvantage here, as the mechanics of type class implementation bleeds through with the `import ops._`.
+- Define an alternative Comp for strings
+  - Define caseInsensitiveStringComp and specs
+  - **Advantage 2**: Scala type classes allow for multiple implementations. You can't do this with sub-typing. It's worth noting that in Haskel, you can't do this. You can only have a single type class instance per class. The tradeoff here is that in Scala, you need to deal with all the ugly details of a raw implementation with implicits.
+- Define a recursive Comp
+  - Define PairComp and specs
+  - Using shapeless, we could define Comps for any n-tuple, case class, or sealed trait hierarchy, that the leaf members of the type all had implicit Comps available.
+- **Advantage 3**: Non-instance methods such as unit/pure
+  - See for example cats [Applicative.pure](https://github.com/typelevel/cats/blob/eab04cf135e645930dad549a286edad419880b68/core/src/main/scala/cats/Applicative.scala#L30)
+  - Define Comp.min and in subclasses
+  - Define minShouldBeSmaller and test for intComp.min
+- Simulacrum:
+  - https://github.com/mpilquist/simulacrum
+  - Simulacrum takes some of the boilerplate out of writing type classes
+  - It also provides a standard implementation, as there are lots of variants
+  - Copy Comp to Comp2, CompSpecs to CompSpecs2
+  - Remove Comp.apply & Comp.ops
+  - Add @simulacrum.typeclass
+  - Run tests
 - Addenda
-  - [Type classes originated circa 1988 in Haskel](https://softwareengineering.stackexchange.com/questions/247023/who-invented-haskells-type-classes)
-  - [Type classes may have informed Scala implicits, but it is not clear](https://softwareengineering.stackexchange.com/a/151077)
+  - [Type classes originated circa 1988 in Haskel](https://softwareengineering.stackexchange.com/questions/247023/who-invented-haskells-type-classes).
+  - [Type classes may have informed Scala implicits, but it is not clear](https://softwareengineering.stackexchange.com/a/151077).
   - Things look very different in dotty: [Typeclass Derivation](https://dotty.epfl.ch/docs/reference/contextual/derivation.html)
     - Part of the motivation here is to replace an implementation-level language feature (implicits) with something more higher-level and intuitive for programmers.
 

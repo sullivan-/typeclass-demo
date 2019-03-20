@@ -8,21 +8,21 @@ trait Comp[A] {
 
 object Comp {
 
-  def apply[A: Comp]: Comp[A] = implicitly[Comp[A]]
-
-  implicit object IntComp extends Comp[Int] {
+  implicit val intComp = new Comp[Int] {
     def comp(a1: Int, a2: Int): Int = a1.compareTo(a2)
     val min = Some(Int.MinValue)
   }
 
-  implicit object StringComp extends Comp[String] {
+  implicit val stringComp = new Comp[String] {
     def comp(a1: String, a2: String): Int = a1.compareTo(a2)
     val min = Some("")
   }
 
+  def apply[A: Comp]: Comp[A] = implicitly[Comp[A]]
+
   object ops {
     implicit class CompOps[A: Comp](a: A) {
-      def comp(a2: A): Int = implicitly[Comp[A]].comp(a, a2)
+      def comp(a2: A): Int = Comp[A].comp(a, a2)
     }
   }
 

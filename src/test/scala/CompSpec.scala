@@ -3,16 +3,16 @@ import Comp.ops._
 
 class CompSpec extends FlatSpec with Matchers {
 
-  "Comp.IntComp" should "compare ints properly" in {
-    Comp.IntComp.comp(0, -7) should be > 0
-    Comp.IntComp.comp(0, 0) should be (0)
-    Comp.IntComp.comp(0, 7) should be < 0
+  "Comp.intComp" should "compare ints properly" in {
+    Comp.intComp.comp(0, -7) should be > 0
+    Comp.intComp.comp(0, 0) should be (0)
+    Comp.intComp.comp(0, 7) should be < 0
   }
 
-  "Comp.StringComp" should "compare strings properly" in {
-    Comp.StringComp.comp("abc", "abb") should be > 0
-    Comp.StringComp.comp("abc", "abc") should be (0)
-    Comp.StringComp.comp("abc", "abd") should be < 0
+  "Comp.stringComp" should "compare strings properly" in {
+    Comp.stringComp.comp("abc", "abb") should be > 0
+    Comp.stringComp.comp("abc", "abc") should be (0)
+    Comp.stringComp.comp("abc", "abd") should be < 0
   }
 
   "Comp.ops" should "provide a more convenient syntax" in {
@@ -31,9 +31,9 @@ class CompSpec extends FlatSpec with Matchers {
   }
 
   "Comp" should "allow for user defined alternative implementations" in {
-    implicit object CaseInsensitiveStringComp extends Comp[String] {
+    implicit val caseInsensitiveStringComp = new Comp[String] {
       def comp(a1: String, a2: String): Int = 
-        Comp.StringComp.comp(a1.toLowerCase, a2.toLowerCase)
+        Comp.stringComp.comp(a1.toLowerCase, a2.toLowerCase)
       def min = Some("")
     }
     "abc".comp("abb") should be > 0
@@ -57,7 +57,7 @@ class CompSpec extends FlatSpec with Matchers {
     a.comp(m) should be >= 0
   }
 
-  "IntComp.min" should "be smaller than any other int value" in {
+  "intComp.min" should "be smaller than any other int value" in {
     minShouldBeSmaller(Int.MinValue)
     minShouldBeSmaller(-7)
     minShouldBeSmaller(0)

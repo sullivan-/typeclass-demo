@@ -11,12 +11,12 @@ import scala.language.implicitConversions
 
 object Comp2 {
 
-  implicit object IntComp2 extends Comp2[Int] {
+  implicit val intComp2 = new Comp2[Int] {
     def comp2(a1: Int, a2: Int): Int = a1.compareTo(a2)
     val min = Some(Int.MinValue)
   }
 
-  implicit object StringComp2 extends Comp2[String] {
+  implicit val stringComp2 = new Comp2[String] {
     def comp2(a1: String, a2: String): Int = a1.compareTo(a2)
     val min = Some("")
   }
